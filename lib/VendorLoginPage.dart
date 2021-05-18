@@ -8,6 +8,7 @@ import 'HomePage.dart';
 import 'RegisterPage.dart';
 import 'VendorPanel.dart';
 import 'VendorRegisterPage.dart';
+import 'dart:core';
 //
 // class VendorLoginPage extends StatefulWidget
 // {
@@ -306,7 +307,6 @@ class _VendorLoginState extends State<VendorLogin>
                 children: [
                   LoginScreenVendor(),
                   V_SignScreen(),
-
                 ],
               ),
             ),
@@ -406,9 +406,9 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
                         EmailValidator(errorText: "Not a valid Email"),
                       ],
                     ),
-                  )
-                ],
-              ),
+
+
+
             ),
 
             Padding(
@@ -485,21 +485,21 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
 
           ],
         ),
-      ),
+      ),],),),
     );
+
   }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class V_SignScreen extends StatefulWidget {
   @override
-  _V_SignScreenState createState() => _V_SignScreenState();
+  V_SignScreenState createState() => V_SignScreenState();
 }
 
-class _V_SignScreenState extends State<V_SignScreen> {
+class V_SignScreenState extends State<V_SignScreen> {
 
   GlobalKey<FormState> V_Signkey =  GlobalKey<FormState>();
-  DatabaseReference _vendorref=FirebaseDatabase.instance.reference().child('vendors');
 
 
 
@@ -509,18 +509,18 @@ class _V_SignScreenState extends State<V_SignScreen> {
   TextEditingController addressController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController vendorShopNameController = TextEditingController();
-
+  static String uid;
   FirebaseAuth auth2=FirebaseAuth.instance;
-
   Future<void> signUp() async
   {
-
     try {
       await auth2.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       // UserCredential userCredential = await auth.signInAnonymously();
-
-      //print(userCredential.user.uid);
+      uid=auth2.currentUser.uid;
+      print(uid);
+      DatabaseReference _vendorref=FirebaseDatabase.instance.reference().child('vendors').child(uid);
+      addUser(_vendorref);
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) =>VendorLogin()));
       showAlertDialog(context);
@@ -529,28 +529,28 @@ class _V_SignScreenState extends State<V_SignScreen> {
       return e.message;
     }
   }
-  void addUser()
-  {
-    String name=nameController.text;
 
+// DatabaseReference _vendorref=FirebaseDatabase.instance.reference().child('vendors').child(uid);
+
+  void addUser(DatabaseReference _vendorref)
+  {
+   // String name=nameController.text;
     String email=emailController.text;
     String password=passwordController.text;
-
     Map<String,String> vendors= {
-      'name':name,
+     'name':null,
       'email':email,
       'password':password,
-
     };
     _vendorref.push().set(vendors);
-
   }
+
   void validate()
   {
     if(V_Signkey.currentState.validate()){
       print('ok');
       signUp();
-      addUser();
+
     }
     //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     else
@@ -561,7 +561,6 @@ class _V_SignScreenState extends State<V_SignScreen> {
 
   String validatePassword(value)
   {
-
     if(value.isEmpty)
     {
       return "Required";
@@ -579,33 +578,29 @@ class _V_SignScreenState extends State<V_SignScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-
       width: 200,
       height: 490,
       // color: Colors.black54,
-      padding:const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Padding(
         padding: const EdgeInsets.only(top: 1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children:[
-
+          children: [
             Form(
-
               autovalidate: true,
               key: V_Signkey,
               child: Column(
-                children:[
+                children: [
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                     decoration: InputDecoration(
                       hintText: "Email Address",
-                      icon:Icon(Icons.email),
+                      icon: Icon(Icons.email),
                     ),
                     validator: MultiValidator(
                       [
@@ -613,9 +608,7 @@ class _V_SignScreenState extends State<V_SignScreen> {
                         EmailValidator(errorText: "Not a valid Email"),
                       ],
                     ),
-
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: TextFormField(
@@ -623,9 +616,7 @@ class _V_SignScreenState extends State<V_SignScreen> {
                       controller: passwordController,
                       decoration: InputDecoration(
                         hintText: "Password",
-                        icon:Icon(Icons.lock),
-
-
+                        icon: Icon(Icons.lock),
                       ),
                       validator: validatePassword,
                     ),
@@ -636,18 +627,13 @@ class _V_SignScreenState extends State<V_SignScreen> {
                       obscureText: true,
                       decoration: InputDecoration(
                         hintText: "confirm Password",
-                        icon:Icon(Icons.lock),
-
-
+                        icon: Icon(Icons.lock),
                       ),
-                      validator:(input)
-                      {
-                        if(input.length<6)
-                        {
+                      validator: (input) {
+                        if (input.length < 6) {
                           return "password must be greater than 6 char";
                         }
-                        if(input!=passwordController.text)
-                        {
+                        if (input != passwordController.text) {
                           return "password must be same";
                         }
                       },
@@ -658,9 +644,8 @@ class _V_SignScreenState extends State<V_SignScreen> {
                       vertical: 10.0,
                     ),
                     child: MaterialButton(
-                        onPressed: (){
-                       validate();
-
+                        onPressed: () {
+                          validate();
                         },
                         color: Colors.teal,
                         shape: StadiumBorder(),
@@ -677,11 +662,9 @@ class _V_SignScreenState extends State<V_SignScreen> {
                           ),
                         )),
                   ),
-
                 ],
               ),
             ),
-
           ],
         ),
       ),

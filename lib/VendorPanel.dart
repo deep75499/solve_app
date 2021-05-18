@@ -11,16 +11,28 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solve_app/HelpPage.dart';
 import 'package:solve_app/HomePage.dart';
 import 'package:solve_app/LoginPage.dart';
-import 'package:solve_app/MyAccountPage.dart';
+import 'package:solve_app/UpdateProfilePage.dart';
 import 'package:solve_app/VendorLoginPage.dart';
+import 'package:solve_app/VendorOrderRequest.dart';
+import 'package:solve_app/VendorProduct.dart';
 //import 'lodingWidget.dart';
+import 'AccountSetting.dart';
+import 'VendorAccountSetting.dart';
+import 'getProduct.dart';
+import 'getUserOrder.dart';
 import 'searchBox.dart';
 import 'VendorLoginPage.dart';
+import 'VendorOrder.dart';
 
 
 class VendorPanel extends StatefulWidget {
 
+VendorPanel()
+{    DatabaseReference vendor_order=FirebaseDatabase.instance.reference().child('vendors').child(LoginScreenVendorState.auth2.currentUser.uid).child('order_request');
 
+vendor_order.once().then((DataSnapshot snap) => _VendorPanelState.getOrderValue(snap));
+
+}
   @override
   _VendorPanelState createState() => _VendorPanelState();
 }
@@ -35,13 +47,71 @@ class _VendorPanelState extends State<VendorPanel>
    TextEditingController _priceController = TextEditingController();
    TextEditingController _titleController = TextEditingController();
    TextEditingController _shortInfoController = TextEditingController();
-   String _productId = DateTime.now().millisecondsSinceEpoch.toString();
+   static String _productId = DateTime.now().millisecondsSinceEpoch.toString();
    bool uploading = false;
-
+  static FirebaseAuth auth=LoginScreenVendorState.auth2;
   DatabaseReference _ref=FirebaseDatabase.instance.reference().child('products');
-  // CollectionReference _ref = FirebaseFirestore.instance.collection('products');
-  FirebaseAuth auth=LoginScreenVendorState.auth2;
 
+  DatabaseReference add_ref=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('products').child(_productId);
+    DatabaseReference get_ref=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('products');
+
+    // CollectionReference _ref = FirebaseFirestore.instance.collection('products');
+
+
+    // V_ref.once().then((DataSnapshot snap) => getValue(snap));
+    static  List<getProduct> vendorProductList =List();
+    void getValue(DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      vendorProductList.clear();
+      for (var individualKey in KEYS) {
+        getProduct Product = new getProduct
+          (
+            DATA[individualKey]['description'],
+            DATA[individualKey]['imageUrl'],
+            DATA[individualKey]['price'],
+            DATA[individualKey]['productId'],
+            DATA[individualKey]['shortInfo'],
+            DATA[individualKey]['title'],
+            DATA[individualKey]['vendorUid'],
+        );
+        vendorProductList.add(Product);
+        print(Product.title.toString());
+
+      }
+      print(vendorProductList.length);
+      Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorProduct(vendorProductList,auth)));
+    }
+
+    static List<getUserOrder> vendorOrderRequestList =List();
+    static void getOrderValue(DataSnapshot snap) {
+      var KEYS = snap.value.keys;
+      var DATA = snap.value;
+      vendorOrderRequestList.clear();
+      for (var individualKey in KEYS) {
+        getUserOrder Product = new getUserOrder
+          (
+          DATA[individualKey]['area'],
+          DATA[individualKey]['city'],
+          DATA[individualKey]['mobile'],
+          DATA[individualKey]['name'],
+          DATA[individualKey]['pincode'],
+          DATA[individualKey]['price'],
+          DATA[individualKey]['product_name'],
+          DATA[individualKey]['product_id'],
+          DATA[individualKey]['state'],
+        );
+        vendorOrderRequestList.add(Product);
+        // print(Product.title.toString());
+
+      }
+      print(vendorOrderRequestList.length);
+      print("helloo");
+      print(vendorOrderRequestList[0].state);
+     // Navigator.push(context,MaterialPageRoute(builder: (context) =>MyOrder()));
+
+      //Navigator.push(context,MaterialPageRoute(builder: (context) =>UserWishList(UserProductList,auth)));
+    }
    @override
   Widget build(BuildContext context) {
    return _image == null ? displayHomeScreen() : displayUploadVendorForm();
@@ -90,10 +160,29 @@ class _VendorPanelState extends State<VendorPanel>
                   ),
                   //icon: Icon(Icons.home),
                   onTap: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>MyAccount()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorAccountSetting(auth)));
                   },
               ),
               Divider(height:5,),
+            ListTile(
+
+              leading: Icon(Icons.person,color: Colors.teal,),
+              title: Text(
+                "My products",
+              ),
+              //icon: Icon(Icons.home),
+              onTap: () async {
+                try {
+                  get_ref.once().then((DataSnapshot snap) => getValue(snap));
+                }
+                catch(e)
+                {
+                  print('no Product');
+                  noProductDialog(context);                }
+
+              },
+            ),
+            Divider(height:5,),
               ListTile(
                   
                   leading: Icon(Icons.shopping_basket, color: Colors.teal,),
@@ -101,7 +190,10 @@ class _VendorPanelState extends State<VendorPanel>
                     "Order Request",
                   ),
                   //icon: Icon(Icons.home),
-                  onTap: (){},
+                  onTap: (){
+                   Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorOrderRequest(vendorOrderRequestList)));
+
+                  },
               ),
 
               Divider(height:5,),
@@ -129,8 +221,9 @@ class _VendorPanelState extends State<VendorPanel>
                   onTap: (){
 
                     auth.signOut();
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorLogin()));
                     auth = null;
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorLogin()));
+
                     if (auth == null) {
                       print("222222222222222222222222222");
                      // Navigator.pop(context, MaterialPageRoute(builder: (context) => VendorLoginPage()));
@@ -452,6 +545,35 @@ await ut.whenComplete(() => addProduct());
       );
     }
 
+    noProductDialog(BuildContext context) {
+      // Create button
+      Widget okButton = FlatButton(
+        child: Text("OK"),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => VendorPanel()));
+
+
+
+        },
+      );
+
+      // Create AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("No Product  Available!"),
+        content: Text("Return to your home page"),
+        actions: [
+          okButton,
+        ],
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
     Future<void> addProduct() async
    {var url;
      try{
@@ -470,6 +592,7 @@ await ut.whenComplete(() => addProduct());
      String shortInfo=_shortInfoController.text;
      String description=_descriptionController.text;
      String productId=_productId;
+     String vendorUid=auth.currentUser.uid;
      Map<String, Object> products= {
        'description':description,
        'imageUrl':imageUrl,
@@ -477,10 +600,22 @@ await ut.whenComplete(() => addProduct());
        'productId':productId,
        'shortInfo':shortInfo,
        'title':title,
+       'vendorUid':vendorUid,
 
 
      };
      _ref.push().set(products).whenComplete(() => showAlertDialog(context));
+
+     add_ref.set({
+       'description':description,
+       'imageUrl':imageUrl,
+       'price':price,
+       'productId':productId,
+       'shortInfo':shortInfo,
+       'title':title,
+       'vendorUid':vendorUid,
+     }).whenComplete(() => print('product also added to your account you can check it'));
+     _productId=DateTime.now().millisecondsSinceEpoch.toString();
    // _ref.add({
    //     'description':description,
    //     'imageUrl':imageUrl,

@@ -1,232 +1,275 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'AddressPage.dart';
-
-
-final priceTextStyle = TextStyle(
-                 color: Colors.grey.shade400,
-                 fontSize: 20.0,
-                 fontWeight: FontWeight.bold,
-               );
+import 'checkOutCard.dart';
 
 class Cart2 extends StatefulWidget {
+
+  Cart2(FirebaseAuth auth,List cartList)
+  {
+    _Cart2State.auth=auth;
+    _Cart2State.cartList=cartList;
+  }
   @override
   _Cart2State createState() => _Cart2State();
 }
 
 class _Cart2State extends State<Cart2> {
+  static FirebaseAuth auth;
+  static List cartList;
+ static DatabaseReference rem_ref=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('cart');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Gift Basket"),
         backgroundColor: Colors.teal,
-        title:Text(
-          'Gift Basket',
-          
-        ),
-        actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-              onPressed: (){},
-            ),
-            IconButton
-            (
-              icon: Icon(Icons.shopping_cart),
-              color: Colors.white, 
-              onPressed: (){}
-            ),
-          ],
-     ),
-      body: Stack(
-        children: <Widget>[
-          SizedBox(
-            height: double.maxFinite,
-            width: 80,
-              child: Ink(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                
-              ),
-            ),
-          ),
-          ListView(
-            padding: const EdgeInsets.fromLTRB(16.0, 25.0, 16.0, 16.0),
+      ),
+      body: getBody(),
+     bottomNavigationBar: CheckoutCard(cartList,auth),
+
+    );
+  }
+
+  final priceTextStyle = TextStyle(
+    color: Colors.grey.shade400,
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+  );
+
+  Widget getBody() {
+    return Container(
+       child: cartList.length == 0
+    ? new Text("no product available")
+        : new ListView.builder(
+    itemCount: cartList.length,
+    itemBuilder: (_, index) {
+    return foodCart(
+    cartList[index].shortInfo,
+    cartList[index].price,cartList[index].imageUrl,cartList[index].productId,
+
+    );
+    }),
+    );
+  }
+}
+void remove(String productId)
+{
+  _Cart2State.rem_ref.child(productId).remove().whenComplete(() => print("item removed from cart"));
+
+}
+
+Container _buildDivider() {
+  return Container(
+    height:2.0,
+    width: double.maxFinite,
+    decoration: BoxDecoration(
+      color: Colors.grey.shade400,
+      borderRadius: BorderRadius.circular(5.0),
+    ),
+  );
+}
+Widget last()
+{
+  final priceTextStyle = TextStyle(
+    color: Colors.grey.shade400,
+    fontSize: 20.0,
+    fontWeight: FontWeight.bold,
+  );
+
+  return Container(
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          const SizedBox(height:20.0),
+          _buildDivider(),
+          const SizedBox(height:20.0),
+          Row(
             children: [
-              Text('My Order',style:TextStyle(
-                color: Colors.black,
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              )),
-              const SizedBox(height: 40.0,),
-              CartListItem(
-                  items: CartItem(
-                    title: "Pizza",
-                    qty: 2,
-                    price: 12,
-                    bgcolor: Colors.deepOrange,
-                    //image: 
-                ),
-              ),
-              // const SizedBox(height: 20.0,),
-              // CartListItem(
-              //     items: CartItem(
-              //       title: "Pizza2",
-              //       qty: 1,
-              //       price: 12,
-              //       bgcolor: Colors.deepOrange,
-              //       //image: 
-              //   ),
-              // ),
-              const SizedBox(height: 20.0,),
-              CartListItem(
-                  items: CartItem(
-                    title: "Pizza3",
-                    qty: 3,
-                    price: 12,
-                    bgcolor: Colors.deepOrange,
-                    //image: 
-                ),
-              ),
-              const SizedBox(height:20.0),
-              _buildDivider(),
-              const SizedBox(height:20.0),
-              Row(
-                children: [
-                  const SizedBox(height:40.0),
-                  Text("VAT (10%)",style: priceTextStyle,),
-                  Spacer(),
-                  Text("\$2",style: priceTextStyle),
-                  const SizedBox(height:20.0,),
-                ],
-              ),
-              const SizedBox(height:20.0),
-              _buildDivider(),
-             const SizedBox(height:10.0),
-              Row(
-                children: [
-                  const SizedBox(height:20.0),
-                  Text("TOTAL",style: priceTextStyle.copyWith(color: Colors.black),),
-                  Spacer(),
-                  Text("\$49",style: priceTextStyle.copyWith(color:Colors.indigo)),
-                  const SizedBox(height:20.0,),
-                ],
-              ),
-              const SizedBox(height: 10.0),
-              RaisedButton(
-                padding: const EdgeInsets.all(16.0),
-                elevation: 0,
-                shape: StadiumBorder(),
-                onPressed: (){
-                  Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => AddressPage())
-              );
-                },
-                color: Colors.yellow.shade700,
-                child: Text('CheckOut',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0),),                
-              ),
+              const SizedBox(height:40.0),
+              Text("VAT (10%)",style: priceTextStyle,),
+              Spacer(),
+              Text("\$2",style: priceTextStyle),
+              const SizedBox(height:20.0,),
             ],
           ),
+          const SizedBox(height:20.0),
+          _buildDivider(),
+          const SizedBox(height:10.0),
+          Row(
+            children: [
+              const SizedBox(height:20.0),
+              Text("TOTAL",style: priceTextStyle.copyWith(color: Colors.black),),
+              Spacer(),
+              Text("\$49",style: priceTextStyle.copyWith(color:Colors.indigo)),
+              const SizedBox(height:20.0,),
+            ],
+          ),
+          const SizedBox(height: 10.0),
+          RaisedButton(
+            padding: const EdgeInsets.all(16.0),
+            elevation: 0,
+
+            shape: StadiumBorder(),
+            onPressed: (){
+              // Navigator.push(
+              //     context, MaterialPageRoute(builder: (context) => AddressPage())
+              // );
+            },
+            color: Colors.yellow.shade700,
+            child: Text('CheckOut',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.0),),
+          ),
         ],
       ),
+    ),
+  );
 
-    );
-  }
+}
 
-  Container _buildDivider() {
-    return Container(
-              height:2.0,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(5.0),
+Widget foodCart(String shortInfo,String price,String imageUrl,String productId
+) {
+  return FittedBox(
+    child: Card(
+      elevation: 15,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+      child: InkWell(
+        onTap: () {
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => ProductDetailPage()));
+        },
+        child: Row(
+          children: [
+            // itemCake(),
+            Container(
+              width: 90,
+              height: 110,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: Image(
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topRight,
+                  image: NetworkImage(imageUrl),
+                ),
               ),
-            );
-  }
-}
-
-class CartItem {
-    final String title;
-    final int qty;
-    final double price;
-    final String image;
-    final Color bgcolor;
-
-  CartItem({this.title,this.qty,this.price,this.image,this.bgcolor});    
-}
-
-class CartListItem extends StatelessWidget {
-  final CartItem items;
-
-  const CartListItem({Key key, this.items}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-       padding: const EdgeInsets.symmetric(horizontal:8.0),
-          child: Row(
-        children: <Widget>[
-          Container(
-            width: 100,
-            height: 100,
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              color: items.bgcolor,
-              borderRadius: BorderRadius.circular(20.0),
-
             ),
-            child: Image.asset('assets/images/gift1.jpg',fit: BoxFit.cover,), //items.image != null ? Image.network(items.image) : null, 
-          ),
-          const SizedBox(width: 20.0),
-          Expanded(
+            Container(
               child: Column(
-                crossAxisAlignment:  CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-              children: [
-               Text(items.title,style: TextStyle(
-                 color: Colors.black,
-                 fontSize: 10.0,
-                 fontWeight: FontWeight.bold
-               ),),
-               const SizedBox(height: 10.0),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey,width: 1.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  height: 40.0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children:[
-                        IconButton(
-                          iconSize: 18.0,
-                          padding:  const EdgeInsets.all(2.0),
-                          icon: Icon(Icons.remove),
-                          onPressed: (){},
-                        ),
-                        Text("${items.qty}" ,style: TextStyle(
-                          color: Colors.black,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+
+                    child: Text(
+                      shortInfo,
+                      style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                        ),),
-                        IconButton(
-                          iconSize: 18.0,
-                          padding:  const EdgeInsets.all(2.0),
-                          icon: Icon(Icons.add),
-                          onPressed: (){},
-                        )
+                          fontSize: 15,
+                          color: Colors.redAccent),
+                    ),
+                  ),
+                  SizedBox(height: 5,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5),
+                    child: Text("Price: "
+                    "₹"+price,
+                      style: TextStyle(
+
+                          fontSize: 15,
+                          color: Colors.black87),
+                    ),
+                  ),
+
+                  SizedBox(height: 6),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 5),
+                      Container(
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text("Qty:"),
+                      ),
+                      SizedBox(width: 5),
+                      Container(
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.remove,
+                          size: 15.0,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Container(
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text("1"),
+                      ),
+                      SizedBox(width: 5),
+                      Container(
+                        width: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[100],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.add,
+                          size: 15.0,
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-           const SizedBox(width: 10.0),
-              Text("\$${items.price + items.qty}" , 
-              style: priceTextStyle,
+                  SizedBox(height: 1),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+
+                      FlatButton(
+                        onPressed: (){
+                          remove(productId);
+                        },
+                        height: 13.0,
+                        minWidth: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                            Text("Remove from cart",style: TextStyle(color: Colors.white,fontSize: 12),),
+
+                          ],
+                        ),
+                        padding: EdgeInsets.all(8),
+                        color: Colors.redAccent,
+                        shape: StadiumBorder(),
+
+                      ),
+                    ],
+                  ),
+                ],
               ),
-        ],
+            ),
+
+          ],
+        ),
       ),
-    );
-  }
+    ),
+  );
 }

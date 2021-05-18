@@ -6,57 +6,81 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:solve_app/Cart2.dart';
-import 'package:solve_app/HelpPage.dart';
-import 'package:solve_app/getProduct.dart';
-//import 'carousel_pro.dart';
-import 'Cart.dart';
+import 'package:solve_app/AccountSetting.dart';
+import 'package:solve_app/UserMyOrder.dart';
+import 'package:solve_app/UserWishList.dart';
+
+import 'CashOnDelivery.dart';
+import 'getProduct.dart';
 import 'ProductDeatilPage.dart';
 import 'Horizontal.dart';
 import 'getProduct.dart';
-import 'MyAccountPage.dart';
-
+import 'UpdateProfilePage.dart';
+import 'UserOrderList.dart';
+import 'getUserOrder.dart';
 import 'searchBox.dart';
 import 'LoginPage.dart';
 import 'Wishlist.dart';
+import 'package:solve_app/Cart2.dart';
+import 'package:solve_app/HelpPage.dart';
 
 class HomePage extends StatefulWidget {
 
-  HomePage(String email,FirebaseAuth auth)
+  HomePage(String email,FirebaseAuth auth,List getProductList)
   {//HomePageState();
     print(email);
     print(auth);
-    HomePageState.aalu(email, auth);
+    CashOnDelivery.m(auth, getProductList);
+    HomePageState.give(email, auth,getProductList);
+    DatabaseReference getUser_order=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('user_order');
+
+    getUser_order.once().then((DataSnapshot snap) => HomePageState.getOrderValue(snap));
+
   }
   @override
   HomePageState createState()=>HomePageState();
 }
 class HomePageState extends  State<HomePage>
-{
-  static String email;
-  static FirebaseAuth auth;
+{   DatabaseReference getCart=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('cart');
+static List<getUserOrder> UserOrderList =List();
+static void getOrderValue(DataSnapshot snap) {
+  var KEYS = snap.value.keys;
+  var DATA = snap.value;
+  UserOrderList.clear();
+  for (var individualKey in KEYS) {
+    getUserOrder Product = new getUserOrder
+      (
+      DATA[individualKey]['area'],
+      DATA[individualKey]['city'],
+      DATA[individualKey]['mobile'],
+      DATA[individualKey]['name'],
+      DATA[individualKey]['pincode'],
+      DATA[individualKey]['price'],
+      DATA[individualKey]['product_name'],
+      DATA[individualKey]['product_id'],
+      DATA[individualKey]['state'],
+    );
+    UserOrderList.add(Product);
+    // print(Product.title.toString());
 
-  static void aalu(String email, FirebaseAuth auth)
-  {
-    print(email);
-    print(auth.currentUser.email);
-    HomePageState.email=email ;
-    HomePageState.auth=auth;
   }
+  print(UserOrderList.length);
+  print("helloo");
+  print(UserOrderList[0].state);
 
- // Query ref = FirebaseDatabase.instance.reference().child('users');
-   HomePageState()
-   {
-    DatabaseReference getProductRef = FirebaseDatabase.instance.reference().child('products');
-    getProductRef.once().then((DataSnapshot snap) => getValue(snap));
-   }
+  //Navigator.push(context,MaterialPageRoute(builder: (context) =>UserWishList(UserProductList,auth)));
+}
+static String email;
+  static FirebaseAuth auth;
+  static  List<getProduct> getProductList ;
 
-  static  List<getProduct> getProductList =List();
 
-  void getValue(DataSnapshot snap) {
+  static  List<getProduct> getCartList =List();
+
+ void getCartValue(DataSnapshot snap) {
     var KEYS = snap.value.keys;
     var DATA = snap.value;
-    getProductList.clear();
+    getCartList.clear();
     for (var individualKey in KEYS) {
       getProduct Product = new getProduct
         (
@@ -65,14 +89,56 @@ class HomePageState extends  State<HomePage>
           DATA[individualKey]['price'],
           DATA[individualKey]['productId'],
           DATA[individualKey]['shortInfo'],
-          DATA[individualKey]['title']
+          DATA[individualKey]['title'],
+          DATA[individualKey]['vendorUid']
       );
-      getProductList.add(Product);
+      getCartList.add(Product);
+      print(Product.title.toString());
+
+
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Cart2(auth,getCartList)));
+
+    print(getCartList.length);
+  }
+  static void give(String email, FirebaseAuth auth,List getProductList)
+  {
+    print(email);
+    print(auth.currentUser.email);
+    HomePageState.email=email ;
+    HomePageState.auth=auth;
+    HomePageState.getProductList=getProductList;
+  }
+  DatabaseReference u_ProductRef=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('products');
+
+ // Query ref = FirebaseDatabase.instance.reference().child('users');
+  static  List<getProduct> UserProductList =List();
+  void getValue(DataSnapshot snap) {
+    var KEYS = snap.value.keys;
+    var DATA = snap.value;
+    UserProductList.clear();
+    for (var individualKey in KEYS) {
+      getProduct Product = new getProduct
+        (
+          DATA[individualKey]['description'],
+          DATA[individualKey]['imageUrl'],
+          DATA[individualKey]['price'],
+          DATA[individualKey]['productId'],
+          DATA[individualKey]['shortInfo'],
+          DATA[individualKey]['title'],
+        DATA[individualKey]['vendorUid']
+      );
+      UserProductList.add(Product);
       print(Product.title.toString());
 
     }
-    print(getProductList.length);
+    print(UserProductList.length);
+    Navigator.push(context,MaterialPageRoute(builder: (context) =>UserWishList(UserProductList,auth)));
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +170,7 @@ class HomePageState extends  State<HomePage>
               //icon: Icon(Icons.home),
               onTap: () {
                 Navigator.pop(context,
-                    MaterialPageRoute(builder: (context) => HomePage(email, auth)));
+                    MaterialPageRoute(builder: (context) => HomePage(email, auth,getProductList)));
               },
             ),
             Divider(
@@ -119,7 +185,7 @@ class HomePageState extends  State<HomePage>
                 "My account",
               ),
               //icon: Icon(Icons.home),
-              onTap: () {Navigator.push(context, MaterialPageRoute(builder:(context)=>MyAccount()));
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder:(context)=>AccountSetting(auth)));
               },
             ),
             Divider(
@@ -134,7 +200,11 @@ class HomePageState extends  State<HomePage>
                 "My Order",
               ),
               //icon: Icon(Icons.home),
-              onTap: () {},
+              onTap: () async {
+
+                Navigator.push(context,MaterialPageRoute(builder:(context)=>UserMyOrder(UserOrderList)));
+
+              },
             ),
             Divider(
               height: 5,
@@ -149,8 +219,8 @@ class HomePageState extends  State<HomePage>
               ),
               //icon: Icon(Icons.home),
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Wishlist()));
+
+                u_ProductRef.once().then((DataSnapshot snap) => getValue(snap));
               },
             ),
             Divider(
@@ -183,12 +253,12 @@ class HomePageState extends  State<HomePage>
               //icon: Icon(Icons.home),
               onTap: () {
                 auth.signOut();
-                Navigator.pop(context,
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => LoginPage()));
                 auth = null;
                 if (auth == null) {
                   print("222222222222222222222222222");
-                 Navigator.pop(context,MaterialPageRoute(builder: (context) => LoginPage()));
+               //  Navigator.pop(context,MaterialPageRoute(builder: (context) => LoginPage()));
                 }
               },
             ),
@@ -214,13 +284,13 @@ class HomePageState extends  State<HomePage>
             icon: Icon(Icons.shopping_cart),
             color: Colors.white,
             onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Cart2()));
+              getCart.once().then((DataSnapshot snap) => getCartValue(snap));
+
             },
           ),
         ],
       ),
-      body:Products(getProductList),
+      body:Products(getProductList,auth),
     );
   }
 
@@ -229,9 +299,10 @@ class HomePageState extends  State<HomePage>
 //////////////////////////////////////////////////////////////////////////////
 
 class Products extends StatefulWidget {
-  Products(List getProductList)
+  Products(List getProductList,FirebaseAuth auth)
   {
     _ProductsState.getProductList=getProductList;
+    _ProductsState.auth=auth;
   }
   @override
   _ProductsState createState() => _ProductsState();
@@ -254,6 +325,7 @@ class _ProductsState extends State<Products> {
   //   }
   // ];
   static  List getProductList =List();
+ static FirebaseAuth auth;
   @override
   Widget build(BuildContext context) {
     Widget image_crousel = Container(
@@ -286,7 +358,7 @@ class _ProductsState extends State<Products> {
             return ProductPost(getProductList[index].description,
                 getProductList[index].imageUrl, getProductList[index].price,
                 getProductList[index].productId,
-                getProductList[index].shortInfo, getProductList[index].title);
+                getProductList[index].shortInfo, getProductList[index].title,getProductList[index].vendorUid);
           }),
     );
 
@@ -323,18 +395,17 @@ class _ProductsState extends State<Products> {
 
 
   }
-  Widget ProductCall() {
 
-  }
-  Widget ProductPost(String description, String image, String price,String productId, String shortInfo, String title){
+  Widget ProductPost(String description, String image, String price,String productId, String shortInfo, String title,String vendorUid){
     return FittedBox(
       child: Card(
         elevation: 15,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         child: InkWell(
           onTap: () {
+
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProductDetailPage(description,image,price,productId,shortInfo,title)));
+                context, MaterialPageRoute(builder: (context) => ProductDetailPage(description,image,price,productId,shortInfo,title,vendorUid,auth)));
           },
           child: Row(
             children: [

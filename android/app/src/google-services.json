@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "389910538389",
-    "project_id": "solve-64548",
-    "storage_bucket": "solve-64548.appspot.com"
+    "project_number": "733053647730",
+    "project_id": "solveit-99d89",
+    "storage_bucket": "solveit-99d89.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:389910538389:android:197025c23022cb1418539c",
+        "mobilesdk_app_id": "1:733053647730:android:9b3d1ce34977f1207f3beb",
         "android_client_info": {
           "package_name": "com.example.solve_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "389910538389-qavon3163co7kgeo3adt926pnjgphr8r.apps.googleusercontent.com",
+          "client_id": "733053647730-h5v1e324impqasimus0c4c4ij9tnt3cg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBJBk7OHE0nTl_UrzZvsg9PGBg0hACSCY0"
+          "current_key": "AIzaSyAMr9PHIdXC3gohOpfeu9hzbCLl5Y3bn_k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "389910538389-qavon3163co7kgeo3adt926pnjgphr8r.apps.googleusercontent.com",
+              "client_id": "733053647730-h5v1e324impqasimus0c4c4ij9tnt3cg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

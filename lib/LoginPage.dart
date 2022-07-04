@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'VendorLoginPage.dart';
+import 'AdminLoginPage.dart';
 import 'getProduct.dart';
 import 'dart:core';
 
@@ -177,7 +177,7 @@ import 'getUserOrder.dart';
           DATA[individualKey]['productId'],
           DATA[individualKey]['shortInfo'],
           DATA[individualKey]['title'],
-        DATA[individualKey]['vendorUid'],
+        DATA[individualKey]['AdminUid'],
       );
       getProductList.add(Product);
       print(Product.title.toString());
@@ -253,7 +253,7 @@ import 'getUserOrder.dart';
                             style: TextStyle(
                               fontSize: 20.0,
                               fontWeight: FontWeight.w700,
-                              color: Colors.teal,
+                              color: Colors.purple,
                             ),
                           ),
                         ),
@@ -269,11 +269,11 @@ import 'getUserOrder.dart';
                         onPressed: () {
                           validate();
                         },
-                        color: Colors.teal,
+                        color: Colors.purple,
                         shape: StadiumBorder(),
                         elevation: 20.0,
                         hoverElevation: 40.0,
-                        splashColor: Colors.teal[400],
+                        splashColor: Colors.purple[400],
                         height: 50.0,
                         minWidth: 300.0,
                         child: Text(
@@ -293,17 +293,17 @@ import 'getUserOrder.dart';
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => VendorLogin()));
+                                  builder: (context) => AdminLogin()));
                         },
-                        color: Colors.teal,
+                        color: Colors.purple,
                         shape: StadiumBorder(),
                         elevation: 20.0,
                         hoverElevation: 40.0,
-                        splashColor: Colors.teal[400],
+                        splashColor: Colors.purple[400],
                         height: 50.0,
                         minWidth: 300.0,
                         child: Text(
-                          "Vender Login",
+                          "Admin Login",
                           style: TextStyle(
                             fontSize: 20.0,
                             color: Colors.white,
@@ -407,11 +407,11 @@ import 'getUserOrder.dart';
                         onPressed: () {
                           validate();
                         },
-                        color: Colors.teal,
+                        color: Colors.purple,
                         shape: StadiumBorder(),
                         elevation: 20.0,
                         hoverElevation: 40.0,
-                        splashColor: Colors.teal[400],
+                        splashColor: Colors.purple[400],
                         height: 50.0,
                         minWidth: 300.0,
                         child: Text(

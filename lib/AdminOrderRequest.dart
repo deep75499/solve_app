@@ -1,32 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:solve_app/ConfirmOrder.dart';
+
 import 'package:solve_app/HomePage.dart';
 import 'package:solve_app/UserOrderList.dart';
 import 'package:solve_app/getUserOrder.dart';
-import 'CashOnDelivery.dart';
-import 'LoginPage.dart';
-import 'checkOutCard.dart';
 
-class VendorOrderRequest extends StatefulWidget
+import 'LoginPage.dart';
+
+
+class AdminOrderRequest extends StatefulWidget
 {
-  VendorOrderRequest(List vendorOrderRequestList)
+  AdminOrderRequest(List AdminOrderRequestList)
   {
-    _VendorOrderRequestState.vendorOrderRequestList=vendorOrderRequestList;
+    _AdminOrderRequestState.AdminOrderRequestList=AdminOrderRequestList;
 // print(UserOrderList.length);
 // _UserMyOrderState.len=UserOrderList.length;
   }
 
   @override
-  _VendorOrderRequestState createState() => _VendorOrderRequestState();
+  _AdminOrderRequestState createState() => _AdminOrderRequestState();
 }
 
-class _VendorOrderRequestState extends State<VendorOrderRequest> {
+class _AdminOrderRequestState extends State<AdminOrderRequest> {
 
 
 
-  static List vendorOrderRequestList;
+  static List AdminOrderRequestList;
   //static FirebaseAuth auth;
 
 
@@ -34,7 +34,7 @@ class _VendorOrderRequestState extends State<VendorOrderRequest> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         title: Column(
           children: [
             Text(
@@ -46,14 +46,14 @@ class _VendorOrderRequestState extends State<VendorOrderRequest> {
         ),
       ),
       body:Container(
-        child: vendorOrderRequestList.length==0
+        child: AdminOrderRequestList.length==0
             ? new Text("no product available")
             : new ListView.builder(
-            itemCount: vendorOrderRequestList.length,
+            itemCount: AdminOrderRequestList.length,
             itemBuilder: (_, index) {
               return order_detail(
-                  vendorOrderRequestList[index].product_name,vendorOrderRequestList[index].product_id,
-                  vendorOrderRequestList[index].price,vendorOrderRequestList[index].name,vendorOrderRequestList[index].mobile,vendorOrderRequestList[index].area,vendorOrderRequestList[index].city,vendorOrderRequestList[index].state,vendorOrderRequestList[index].pincode
+                  AdminOrderRequestList[index].product_name,AdminOrderRequestList[index].product_id,
+                  AdminOrderRequestList[index].price,AdminOrderRequestList[index].name,AdminOrderRequestList[index].mobile,AdminOrderRequestList[index].area,AdminOrderRequestList[index].city,AdminOrderRequestList[index].state,AdminOrderRequestList[index].pincode
 
               );
             }),

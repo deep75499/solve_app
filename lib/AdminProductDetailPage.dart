@@ -2,18 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import 'Cart2.dart';
 
-class VendorProductDetailPage extends StatefulWidget {
-  VendorProductDetailPage(String description, String image, String price,String productId, String shortInfo, String title,FirebaseAuth auth)
+
+class AdminProductDetailPage extends StatefulWidget {
+  AdminProductDetailPage(String description, String image, String price,String productId, String shortInfo, String title,FirebaseAuth auth)
   {
-    _VendorProductDetailPageState.show(description,image,price,productId,shortInfo,title,auth);
+    _AdminProductDetailPageState.show(description,image,price,productId,shortInfo,title,auth);
   }
   @override
-  _VendorProductDetailPageState createState() => _VendorProductDetailPageState();
+  _AdminProductDetailPageState createState() => _AdminProductDetailPageState();
 }
 
-class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
+class _AdminProductDetailPageState extends State<AdminProductDetailPage> {
   
 
   static String description;
@@ -23,16 +23,16 @@ class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
   static String shortInfo;
   static String title;
   static FirebaseAuth auth;
-  DatabaseReference rem_ref=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('products').child(productId);
+  DatabaseReference rem_ref=FirebaseDatabase.instance.reference().child('Admins').child(auth.currentUser.uid).child('products').child(productId);
   static void show(String description, String image, String price,String productId, String shortInfo, String title, FirebaseAuth auth)
   {
-    _VendorProductDetailPageState.description=description;
-    _VendorProductDetailPageState.imageUrl=image;
-    _VendorProductDetailPageState.price=price;
-    _VendorProductDetailPageState.productId=productId;
-    _VendorProductDetailPageState.shortInfo=shortInfo;
-    _VendorProductDetailPageState.title=title;
-    _VendorProductDetailPageState.auth=auth;
+    _AdminProductDetailPageState.description=description;
+    _AdminProductDetailPageState.imageUrl=image;
+    _AdminProductDetailPageState.price=price;
+    _AdminProductDetailPageState.productId=productId;
+    _AdminProductDetailPageState.shortInfo=shortInfo;
+    _AdminProductDetailPageState.title=title;
+    _AdminProductDetailPageState.auth=auth;
 
   }
   DatabaseReference userProduct =FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('products');
@@ -165,7 +165,7 @@ class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
                 RaisedButton(
                   child: Text('Delete product'),
                   onPressed: (){
-                    rem_ref.remove().whenComplete(() => print("product deleted from vendor database"));
+                    rem_ref.remove().whenComplete(() => print("product deleted from Admin database"));
                   },
                 ),
 
@@ -181,7 +181,7 @@ class _VendorProductDetailPageState extends State<VendorProductDetailPage> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-        Navigator.pop(context, MaterialPageRoute(builder: (context) =>VendorProductDetailPage(description, imageUrl, price, productId, shortInfo, title, auth)));
+        Navigator.pop(context, MaterialPageRoute(builder: (context) =>AdminProductDetailPage(description, imageUrl, price, productId, shortInfo, title, auth)));
 
 
 

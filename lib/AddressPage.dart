@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'CartOut.dart';
+
 
 
 class AddressPage extends StatefulWidget {
@@ -191,9 +191,7 @@ static List cartList;
 
 
             // Respond to button press
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => CheckOutPage(nameController.text,mobileController.text,cityController.text,areaController.text,stateController.text,pincodeController.text,cartList,auth))
-              );
+
           },
           label: Text('Add Address',style: TextStyle(fontSize:20.0,fontWeight: FontWeight.bold),),
           //icon: Icon(Icons.arrow_right),

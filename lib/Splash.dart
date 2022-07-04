@@ -30,7 +30,7 @@ class _SplaceState extends State<Splace>{
   Widget build(BuildContext context) {
     return Scaffold(
 
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -38,7 +38,7 @@ class _SplaceState extends State<Splace>{
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Welcome To\nGift Basket",
+                  "Welcome To\nE-Auction",
                   style: TextStyle(
                     fontSize:40.0,
                     color:Colors.white,

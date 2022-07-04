@@ -5,29 +5,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solve_app/UpdateProfilePage.dart';
 
-import 'VendorUpdateProfilePage.dart';
+import 'AdminUpdateProfilePage.dart';
 
-class VendorCheckProfile extends StatefulWidget
+class AdminCheckProfile extends StatefulWidget
 {
-  VendorCheckProfile(List ProfileList,FirebaseAuth auth)
+  AdminCheckProfile(List ProfileList,FirebaseAuth auth)
   {
     // _CheckProfileState.ProfileList=ProfileList;
-    _VendorCheckProfileState.auth=auth;
-    _VendorCheckProfileState.area=ProfileList[0].area;
-    _VendorCheckProfileState.mobile=ProfileList[0].mobile;
-    _VendorCheckProfileState.name=ProfileList[0].name;
-    _VendorCheckProfileState.city=ProfileList[0].city;
-    _VendorCheckProfileState.pincode=ProfileList[0].pincode;
-    _VendorCheckProfileState.state=ProfileList[0].state;_VendorCheckProfileState.profilePic=ProfileList[0].profilePic;
+    _AdminCheckProfileState.auth=auth;
+    _AdminCheckProfileState.area=ProfileList[0].area;
+    _AdminCheckProfileState.mobile=ProfileList[0].mobile;
+    _AdminCheckProfileState.name=ProfileList[0].name;
+    _AdminCheckProfileState.city=ProfileList[0].city;
+    _AdminCheckProfileState.pincode=ProfileList[0].pincode;
+    _AdminCheckProfileState.state=ProfileList[0].state;_AdminCheckProfileState.profilePic=ProfileList[0].profilePic;
 
 
-    _VendorCheckProfileState.m();
+    _AdminCheckProfileState.m();
   }
   @override
-  _VendorCheckProfileState createState() => _VendorCheckProfileState();
+  _AdminCheckProfileState createState() => _AdminCheckProfileState();
 }
 
-class _VendorCheckProfileState extends State<VendorCheckProfile>
+class _AdminCheckProfileState extends State<AdminCheckProfile>
 {
 
 
@@ -121,7 +121,7 @@ class _VendorCheckProfileState extends State<VendorCheckProfile>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => VendorUpdateProfilePage(auth)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminUpdateProfilePage(auth)));
                   },
                     child: Text('Update',
                       style: TextStyle(

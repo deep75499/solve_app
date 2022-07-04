@@ -8,20 +8,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:solve_app/AccountSetting.dart';
 import 'CheckProfile.dart';
 
-class VendorUpdateProfilePage extends StatefulWidget
+class AdminUpdateProfilePage extends StatefulWidget
 {
-  VendorUpdateProfilePage(FirebaseAuth auth)
+  AdminUpdateProfilePage(FirebaseAuth auth)
   {
-    _VendorUpdateProfilePageState.auth=auth;
+    _AdminUpdateProfilePageState.auth=auth;
   }
   @override
-  _VendorUpdateProfilePageState createState() => _VendorUpdateProfilePageState();
+  _AdminUpdateProfilePageState createState() => _AdminUpdateProfilePageState();
 }
 
-class _VendorUpdateProfilePageState extends State<VendorUpdateProfilePage>
+class _AdminUpdateProfilePageState extends State<AdminUpdateProfilePage>
 {
   static FirebaseAuth auth;
-  DatabaseReference add_prof=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('profile').child(auth.currentUser.uid);
+  DatabaseReference add_prof=FirebaseDatabase.instance.reference().child('Admins').child(auth.currentUser.uid).child('profile').child(auth.currentUser.uid);
   TextEditingController nameController=TextEditingController();
   TextEditingController emailController=TextEditingController();
   TextEditingController mobileController=TextEditingController();

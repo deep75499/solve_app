@@ -5,23 +5,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solve_app/UpdateProfilePage.dart';
 import 'CheckProfile.dart';
-import 'VendorCheckProfile.dart';
-import 'VendorUpdateProfilePage.dart';
+import 'AdminCheckProfile.dart';
+import 'AdminUpdateProfilePage.dart';
 import 'getProfile.dart';
 
-class VendorAccountSetting extends StatefulWidget
+class AdminAccountSetting extends StatefulWidget
 {
-  VendorAccountSetting(FirebaseAuth auth)
+  AdminAccountSetting(FirebaseAuth auth)
   {
-    _VendorAccountSettingState.auth=auth;
+    _AdminAccountSettingState.auth=auth;
   }
   @override
-  createState() => _VendorAccountSettingState();
+  createState() => _AdminAccountSettingState();
 }
 
-class _VendorAccountSettingState extends State<VendorAccountSetting> {
+class _AdminAccountSettingState extends State<AdminAccountSetting> {
 
-  DatabaseReference profile=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('profile');
+  DatabaseReference profile=FirebaseDatabase.instance.reference().child('Admins').child(auth.currentUser.uid).child('profile');
 
   static List<getProfile> ProfileList =List();
 
@@ -48,7 +48,7 @@ class _VendorAccountSettingState extends State<VendorAccountSetting> {
               child:Text('Update Your Profile'),
               onPressed: (){
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => VendorUpdateProfilePage(auth)));
+                    MaterialPageRoute(builder: (context) => AdminUpdateProfilePage(auth)));
               }),
           RaisedButton(
               child:Text('Change Your Password'),
@@ -79,7 +79,7 @@ class _VendorAccountSettingState extends State<VendorAccountSetting> {
     }
     print(ProfileList.length);
     print(ProfileList.toString());
-    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorCheckProfile(ProfileList,auth)));
+    Navigator.push(context,MaterialPageRoute(builder: (context) =>AdminCheckProfile(ProfileList,auth)));
   }
 }
 

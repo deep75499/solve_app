@@ -126,7 +126,7 @@ class _OrderListState extends State<OrderList> {
                       Text('Online (Debited)',
                       style: TextStyle(
                         fontSize: 18.0,
-                        color: Colors.green,
+                        color: Colors.purpleAccent,
                       ),),
                     ],
                   ),

@@ -2,38 +2,38 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'ProductDeatilPage.dart';
-import 'VendorProductDetailPage.dart';
+import 'AdminProductDetailPage.dart';
 
-class VendorProduct extends StatefulWidget {
-  VendorProduct(List vendorProduct,FirebaseAuth auth)
+class AdminProduct extends StatefulWidget {
+  AdminProduct(List AdminProduct,FirebaseAuth auth)
   {
-    _VendorProductState.vendorProduct=vendorProduct;
-    _VendorProductState.auth=auth;
+    _AdminProductState.AdminProduct=AdminProduct;
+    _AdminProductState.auth=auth;
   }
   @override
-  _VendorProductState createState() => _VendorProductState();
+  _AdminProductState createState() => _AdminProductState();
 }
 
-class _VendorProductState extends State<VendorProduct> {
-static List vendorProduct;
+class _AdminProductState extends State<AdminProduct> {
+static List AdminProduct;
 static FirebaseAuth auth;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Product('+vendorProduct.length.toString()+' items)'),
+        title: Text('Your Product('+AdminProduct.length.toString()+' items)'),
       ),
         body:Container(
 
-    child: vendorProduct.length == 0
+    child: AdminProduct.length == 0
     ? new Text("no product available")
         : new ListView.builder(
-    itemCount: vendorProduct.length,
+    itemCount: AdminProduct.length,
     itemBuilder: (_, index) {
-    return ProductPost(vendorProduct[index].description,
-    vendorProduct[index].imageUrl, vendorProduct[index].price,
-        vendorProduct[index].productId,
-        vendorProduct[index].shortInfo, vendorProduct[index].title);
+    return ProductPost(AdminProduct[index].description,
+    AdminProduct[index].imageUrl, AdminProduct[index].price,
+        AdminProduct[index].productId,
+        AdminProduct[index].shortInfo, AdminProduct[index].title);
     }),
     ),
     );
@@ -47,7 +47,7 @@ Widget ProductPost(String description, String image, String price,String product
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => VendorProductDetailPage(description,image,price,productId,shortInfo,title,auth)));
+              context, MaterialPageRoute(builder: (context) => AdminProductDetailPage(description,image,price,productId,shortInfo,title,auth)));
         },
         child: Row(
           children: [

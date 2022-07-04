@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:solve_app/ConfirmOrder.dart';
+
 import 'package:solve_app/HomePage.dart';
 import 'package:solve_app/UserOrderList.dart';
 import 'package:solve_app/getUserOrder.dart';
-import 'CashOnDelivery.dart';
+
 import 'LoginPage.dart';
-import 'checkOutCard.dart';
+
 
 class UserMyOrder extends StatefulWidget
 {
@@ -34,7 +34,7 @@ static int len;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         title: Column(
           children: [
             Text(

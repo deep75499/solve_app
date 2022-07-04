@@ -7,10 +7,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:solve_app/AccountSetting.dart';
+import 'package:solve_app/SubmitBid.dart';
 import 'package:solve_app/UserMyOrder.dart';
 import 'package:solve_app/UserWishList.dart';
 
-import 'CashOnDelivery.dart';
+
 import 'getProduct.dart';
 import 'ProductDeatilPage.dart';
 import 'Horizontal.dart';
@@ -20,8 +21,8 @@ import 'UserOrderList.dart';
 import 'getUserOrder.dart';
 import 'searchBox.dart';
 import 'LoginPage.dart';
-import 'Wishlist.dart';
-import 'package:solve_app/Cart2.dart';
+
+
 import 'package:solve_app/HelpPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,7 +31,7 @@ class HomePage extends StatefulWidget {
   {//HomePageState();
     print(email);
     print(auth);
-    CashOnDelivery.m(auth, getProductList);
+
     HomePageState.give(email, auth,getProductList);
     DatabaseReference getUser_order=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('user_order');
 
@@ -97,7 +98,7 @@ static String email;
 
 
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Cart2(auth,getCartList)));
+  //  Navigator.push(context, MaterialPageRoute(builder: (context) => Cart2(auth,getCartList)));
 
     print(getCartList.length);
   }
@@ -162,7 +163,7 @@ static String email;
             ListTile(
               leading: Icon(
                 Icons.home,
-                color: Colors.teal,
+                color: Colors.purple,
               ),
               title: Text(
                 "HomePage",
@@ -179,7 +180,7 @@ static String email;
             ListTile(
               leading: Icon(
                 Icons.person,
-                color: Colors.teal,
+                color: Colors.purple,
               ),
               title: Text(
                 "My account",
@@ -194,7 +195,7 @@ static String email;
             ListTile(
               leading: Icon(
                 Icons.shopping_basket,
-                color: Colors.teal,
+                color: Colors.purple,
               ),
               title: Text(
                 "My Order",
@@ -212,15 +213,15 @@ static String email;
             ListTile(
               leading: Icon(
                 Icons.category,
-                color: Colors.teal,
+                color: Colors.purple,
               ),
               title: Text(
-                "Wishlist",
+                "Submit Bid",
               ),
               //icon: Icon(Icons.home),
               onTap: () {
-
-                u_ProductRef.once().then((DataSnapshot snap) => getValue(snap));
+                Navigator.push(context,MaterialPageRoute(builder:(context)=>SubmitBid()));
+             //   u_ProductRef.once().then((DataSnapshot snap) => getValue(snap));
               },
             ),
             Divider(
@@ -245,7 +246,7 @@ static String email;
             ListTile(
               leading: Icon(
                 Icons.logout,
-                color: Colors.teal,
+                color: Colors.purple,
               ),
               title: Text(
                 "Logout",
@@ -267,9 +268,9 @@ static String email;
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         title: Text(
-          'Gift Basket',
+          'E-Auction',
         ),
         actions: <Widget>[
           IconButton(
@@ -280,14 +281,18 @@ static String email;
               onPressed: () {
                 showSearch(context: context, delegate: Datasearch());
               }),
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            color: Colors.white,
-            onPressed: () {
-              getCart.once().then((DataSnapshot snap) => getCartValue(snap));
 
-            },
-          ),
+      //// ....................cart icon and function.............................
+
+
+          // IconButton(
+          //   icon: Icon(Icons.shopping_cart),
+          //   color: Colors.white,
+          //   onPressed: () {
+          //     getCart.once().then((DataSnapshot snap) => getCartValue(snap));
+          //
+          //   },
+          // ),
         ],
       ),
       body:Products(getProductList,auth),
@@ -467,23 +472,7 @@ class _ProductsState extends State<Products> {
                                 color: Colors.red),
                           ),
                         ),
-                        SizedBox(width: 5),
-                        Container(
-                          width: 35,
-                          decoration: BoxDecoration(
-                            color: Colors.lightBlue[100],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "\$34",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 9.5,
-                                color: Colors.grey,
-                                decoration: TextDecoration.lineThrough),
-                          ),
-                        ),
+
                       ],
                     ),
                     SizedBox(height: 8),
@@ -491,18 +480,13 @@ class _ProductsState extends State<Products> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Rating',
+                          'Click to Bid',
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 7,
+                              fontSize: 15,
                               color: Colors.grey),
                         ),
-                        SizedBox(width: 5),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
+
                       ],
                     ),
                   ],
@@ -560,7 +544,7 @@ class _ProductsState extends State<Products> {
                         Container(
                           width: 35,
                           decoration: BoxDecoration(
-                            color: Colors.lightBlue[100],
+                            color: Colors.purple[100],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.center,
@@ -576,7 +560,7 @@ class _ProductsState extends State<Products> {
                         Container(
                           width: 35,
                           decoration: BoxDecoration(
-                            color: Colors.lightBlue[100],
+                            color: Colors.purple[100],
                             borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.center,
@@ -596,18 +580,13 @@ class _ProductsState extends State<Products> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Rating',
+                          'Click to Bid',
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 7,
+                              fontSize: 12,
                               color: Colors.grey),
                         ),
-                        SizedBox(width: 5),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
-                        Icon(Icons.star, size: 10, color: Colors.orangeAccent),
+
                       ],
                     ),
                   ],

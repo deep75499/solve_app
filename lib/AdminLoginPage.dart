@@ -6,24 +6,24 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'LoginPage.dart';
 import 'HomePage.dart';
 import 'RegisterPage.dart';
-import 'VendorPanel.dart';
-import 'VendorRegisterPage.dart';
+import 'AdminPanel.dart';
+
 import 'dart:core';
 //
-// class VendorLoginPage extends StatefulWidget
+// class AdminLoginPage extends StatefulWidget
 // {
 //   @override
-//   VendorLoginPageState createState() => VendorLoginPageState();
+//   AdminLoginPageState createState() => AdminLoginPageState();
 //
 //
 //   }
 //
 //
 //
-// class VendorLoginPageState extends State<VendorLoginPage> {
+// class AdminLoginPageState extends State<AdminLoginPage> {
 //
 //
-//   GlobalKey<FormState> _vendorloginkey =  GlobalKey<FormState>();
+//   GlobalKey<FormState> _Adminloginkey =  GlobalKey<FormState>();
 //   TextEditingController emailController = TextEditingController();
 //   TextEditingController passwordController = TextEditingController();
 //   static FirebaseAuth auth2=FirebaseAuth.instance;
@@ -76,7 +76,7 @@ import 'dart:core';
 //                         ),
 //                         child: Form(
 //                           autovalidate: true,
-//                           key:_vendorloginkey,
+//                           key:_Adminloginkey,
 //
 //                           child:  Column(
 //                             children: <Widget>[
@@ -100,7 +100,7 @@ import 'dart:core';
 //                                     ),
 //
 //                                     decoration: InputDecoration(
-//                                       hintText: 'Vendor Username',
+//                                       hintText: 'Admin Username',
 //                                       border: OutlineInputBorder(),
 //                                       filled: true,
 //                                       fillColor: Colors.transparent,
@@ -155,7 +155,7 @@ import 'dart:core';
 //                                   vertical: 20.0,
 //                                 ),
 //                                 child: MaterialButton(
-//                                     onPressed:()=>vendorsignIn(),
+//                                     onPressed:()=>AdminsignIn(),
 //                                     color: Colors.teal,
 //                                     shape: StadiumBorder(),
 //                                     elevation: 20.0,
@@ -164,7 +164,7 @@ import 'dart:core';
 //                                     height: 50.0,
 //                                     minWidth: 300.0,
 //                                     child: Text(
-//                                       "Vendor Login",
+//                                       "Admin Login",
 //                                       style: TextStyle(
 //                                         fontSize: 20.0,
 //                                         color: Colors.white,
@@ -179,7 +179,7 @@ import 'dart:core';
 //                                 child: MaterialButton(
 //                                     onPressed: () {
 //                                       Navigator.push(context, MaterialPageRoute(
-//                                           builder: (context) => VendorRegisterPage()
+//                                           builder: (context) => AdminRegisterPage()
 //                                       )
 //                                       );
 //                                     },
@@ -191,7 +191,7 @@ import 'dart:core';
 //                                     height: 50.0,
 //                                     minWidth: 300.0,
 //                                     child: Text(
-//                                       "Vendor SignUp",
+//                                       "Admin SignUp",
 //                                       style: TextStyle(
 //                                         fontSize: 20.0,
 //                                         color: Colors.white,
@@ -215,7 +215,7 @@ import 'dart:core';
 //   }
 //
 //
-//   Future<void> vendorsignIn() async
+//   Future<void> AdminsignIn() async
 //   {
 //     try {
 //       auth2.signInWithEmailAndPassword(
@@ -224,7 +224,7 @@ import 'dart:core';
 //
 //       //print(userCredential.user.uid);
 //       Navigator.push(context,
-//           MaterialPageRoute(builder: (context) => VendorPanel()));
+//           MaterialPageRoute(builder: (context) => AdminPanel()));
 //     }
 //     catch(e){
 //       print(".^^^^^^^^^^^^^^^^^^^^");
@@ -234,12 +234,12 @@ import 'dart:core';
 //
 // }
 
-class VendorLogin extends StatefulWidget {
+class AdminLogin extends StatefulWidget {
   @override
-  _VendorLoginState createState() => _VendorLoginState();
+  _AdminLoginState createState() => _AdminLoginState();
 }
 
-class _VendorLoginState extends State<VendorLogin>
+class _AdminLoginState extends State<AdminLogin>
     with SingleTickerProviderStateMixin{
 
   TabController _tabController;
@@ -305,7 +305,7 @@ class _VendorLoginState extends State<VendorLogin>
                 controller: _tabController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  LoginScreenVendor(),
+                  LoginScreenAdmin(),
                   V_SignScreen(),
                 ],
               ),
@@ -317,18 +317,18 @@ class _VendorLoginState extends State<VendorLogin>
   }
 }
 
-class LoginScreenVendor extends StatefulWidget {
+class LoginScreenAdmin extends StatefulWidget {
   @override
-  LoginScreenVendorState createState() => LoginScreenVendorState();
+  LoginScreenAdminState createState() => LoginScreenAdminState();
 }
 
-class LoginScreenVendorState extends State<LoginScreenVendor> {
+class LoginScreenAdminState extends State<LoginScreenAdmin> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
    static FirebaseAuth auth2=FirebaseAuth.instance;
   GlobalKey<FormState> loginkey =  GlobalKey<FormState>();
 
-  Future<void> vendorsignIn() async
+  Future<void> AdminsignIn() async
   {
     try {
       auth2.signInWithEmailAndPassword(
@@ -337,7 +337,7 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
 
       //print(userCredential.user.uid);
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => VendorPanel()));
+          MaterialPageRoute(builder: (context) => AdminPanel()));
     }
     catch(e){
       print(".^^^^^^^^^^^^^^^^^^^^");
@@ -348,7 +348,7 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
   {
     if(loginkey.currentState.validate()){
       print('ok');
-    vendorsignIn();}
+    AdminsignIn();}
     //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     else
       print("Not A valid");
@@ -426,7 +426,7 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w700,
-                        color: Colors.teal,
+                        color: Colors.purple,
                       ),
                     ),
                   ),
@@ -444,15 +444,15 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
                   onPressed: (){
                     validate();
                   },
-                  color: Colors.teal,
+                  color: Colors.purple,
                   shape: StadiumBorder(),
                   elevation: 20.0,
                   hoverElevation: 40.0,
-                  splashColor: Colors.teal[400],
+                  splashColor: Colors.purple[400],
                   height: 50.0,
                   minWidth: 300.0,
                   child: Text(
-                    "Vendor Login",
+                    "Admin Login",
                     style: TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -467,11 +467,11 @@ class LoginScreenVendorState extends State<LoginScreenVendor> {
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                   },
-                  color: Colors.teal,
+                  color: Colors.purple,
                   shape: StadiumBorder(),
                   elevation: 20.0,
                   hoverElevation: 40.0,
-                  splashColor: Colors.teal[400],
+                  splashColor: Colors.purple[400],
                   height: 50.0,
                   minWidth: 300.0,
                   child: Text(
@@ -508,7 +508,7 @@ class V_SignScreenState extends State<V_SignScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController vendorShopNameController = TextEditingController();
+  TextEditingController AdminShopNameController = TextEditingController();
   static String uid;
   FirebaseAuth auth2=FirebaseAuth.instance;
   Future<void> signUp() async
@@ -519,10 +519,10 @@ class V_SignScreenState extends State<V_SignScreen> {
       // UserCredential userCredential = await auth.signInAnonymously();
       uid=auth2.currentUser.uid;
       print(uid);
-      DatabaseReference _vendorref=FirebaseDatabase.instance.reference().child('vendors').child(uid);
-      addUser(_vendorref);
+      DatabaseReference _Adminref=FirebaseDatabase.instance.reference().child('Admins').child(uid);
+      addUser(_Adminref);
       // Navigator.push(context,
-      //     MaterialPageRoute(builder: (context) =>VendorLogin()));
+      //     MaterialPageRoute(builder: (context) =>AdminLogin()));
       showAlertDialog(context);
     }
     on FirebaseAuthException catch (e) {
@@ -530,19 +530,19 @@ class V_SignScreenState extends State<V_SignScreen> {
     }
   }
 
-// DatabaseReference _vendorref=FirebaseDatabase.instance.reference().child('vendors').child(uid);
+// DatabaseReference _Adminref=FirebaseDatabase.instance.reference().child('Admins').child(uid);
 
-  void addUser(DatabaseReference _vendorref)
+  void addUser(DatabaseReference _Adminref)
   {
    // String name=nameController.text;
     String email=emailController.text;
     String password=passwordController.text;
-    Map<String,String> vendors= {
+    Map<String,String> Admins= {
      'name':null,
       'email':email,
       'password':password,
     };
-    _vendorref.push().set(vendors);
+    _Adminref.push().set(Admins);
   }
 
   void validate()
@@ -647,15 +647,15 @@ class V_SignScreenState extends State<V_SignScreen> {
                         onPressed: () {
                           validate();
                         },
-                        color: Colors.teal,
+                        color: Colors.purple,
                         shape: StadiumBorder(),
                         elevation: 20.0,
                         hoverElevation: 40.0,
-                        splashColor: Colors.teal[400],
+                        splashColor: Colors.purple[400],
                         height: 50.0,
                         minWidth: 300.0,
                         child: Text(
-                          "Vendor SignUp",
+                          "Admin SignUp",
                           style: TextStyle(
                             fontSize: 20.0,
                             color: Colors.white,
@@ -676,7 +676,7 @@ class V_SignScreenState extends State<V_SignScreen> {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
-         Navigator.push(context, MaterialPageRoute(builder: (context) => VendorLogin()));
+         Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLogin()));
 
 
       },
@@ -685,7 +685,7 @@ class V_SignScreenState extends State<V_SignScreen> {
     // Create AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Signed Successfully!"),
-      content: Text("Return to Vendor Login page"),
+      content: Text("Return to Admin Login page"),
       actions: [
         okButton,
       ],

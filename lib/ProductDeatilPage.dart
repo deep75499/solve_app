@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:solve_app/BidPage.dart';
 
-import 'Cart2.dart';
+
 import 'getProduct.dart';
 
 class ProductDetailPage extends StatefulWidget {
@@ -63,7 +64,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     }
     print(getCartList.length);
-    Navigator.push(context,MaterialPageRoute(builder: (context) =>Cart2(auth,getCartList)));
+  //  Navigator.push(context,MaterialPageRoute(builder: (context) =>Cart2(auth,getCartList)));
 
   }
   // final product_name;
@@ -109,9 +110,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         title:Text(
-          'Gift Basket',
+          'E-Auction',
 
         ),
         actions: <Widget>[
@@ -125,12 +126,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             },
           ),
-          IconButton
-            (
-              icon: Icon(Icons.shopping_cart),
-              color: Colors.white,
-              onPressed: (){}
-          ),
+          // IconButton
+          //   (
+          //     icon: Icon(Icons.shopping_cart),
+          //     color: Colors.white,
+          //     onPressed: (){}
+          // ),
         ],
       ),
       body: ListView(
@@ -162,15 +163,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       title: Row(
                         children:<Widget> [
-                          Expanded(
-                            child: Text(
-                              '₹'+"10000",
-                              style: TextStyle(
-                                  color:Colors.grey,
-                                  decoration: TextDecoration.lineThrough
-                              ),
-                            ),
-                          ),
+
                           Expanded(
                             child: Text(
                               "₹"+price,
@@ -207,40 +200,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 Expanded(
                     child: MaterialButton(
                       onPressed: (){
-                        addtoCart();
-                        getCart.once().then((DataSnapshot snap) => getValue(snap));
-
+                        Navigator.push(context,MaterialPageRoute(builder: (context) =>BidPage(description, imageUrl, price, productId, shortInfo, title, vendorUid, auth)));
                       },
-                      color: Colors.teal,
+                      color: Colors.purple,
                       textColor: Colors.white,
                       shape: StadiumBorder(),
-                      child: Text('Buy Now'),
+                      child: Text('Bid Now'),
                     )
                 ),
-                IconButton(
-                    icon: Icon(Icons.add_shopping_cart,color:Colors.teal),
-                    onPressed: (){
-                      addtoCart();
-                      getCart.once().then((DataSnapshot snap) => getValue(snap));
-                     // Navigator.push(context,MaterialPageRoute(builder: (context) =>Cart2(auth,getCartList)));
 
-                    }
-                ),
-                IconButton(
-                    icon: Icon(Icons.favorite,color:_hasbeenPressed? Colors.teal:Colors.black26),
-                    onPressed: (){
-                      setState(() {
-                        _hasbeenPressed = !_hasbeenPressed;
-                      });
-                      if(_hasbeenPressed==true) {
-                        addProduct();
-                      }
-                      else
-                      {
-                       userProduct.remove().whenComplete(() =>  rem_showAlertDialog(context)); 
-                      }
-                    }
-                )
+                //........................................cart_icon and wish;ist...............................
+
+                // IconButton(
+                //     icon: Icon(Icons.add_shopping_cart,color:Colors.purple),
+                //     onPressed: (){
+                //       addtoCart();
+                //       getCart.once().then((DataSnapshot snap) => getValue(snap));
+                //      // Navigator.push(context,MaterialPageRoute(builder: (context) =>Cart2(auth,getCartList)));
+                //
+                //     }
+                // ),
+                // IconButton(
+                //     icon: Icon(Icons.favorite,color:_hasbeenPressed? Colors.teal:Colors.black26),
+                //     onPressed: (){
+                //       setState(() {
+                //         _hasbeenPressed = !_hasbeenPressed;
+                //       });
+                //       if(_hasbeenPressed==true) {
+                //         addProduct();
+                //       }
+                //       else
+                //       {
+                //        userProduct.remove().whenComplete(() =>  rem_showAlertDialog(context));
+                //       }
+                //     }
+                // )
               ],
             )
           ]

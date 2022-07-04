@@ -12,32 +12,32 @@ import 'package:solve_app/HelpPage.dart';
 import 'package:solve_app/HomePage.dart';
 import 'package:solve_app/LoginPage.dart';
 import 'package:solve_app/UpdateProfilePage.dart';
-import 'package:solve_app/VendorLoginPage.dart';
-import 'package:solve_app/VendorOrderRequest.dart';
-import 'package:solve_app/VendorProduct.dart';
+import 'package:solve_app/AdminLoginPage.dart';
+import 'package:solve_app/AdminOrderRequest.dart';
+import 'package:solve_app/AdminProduct.dart';
 //import 'lodingWidget.dart';
 import 'AccountSetting.dart';
-import 'VendorAccountSetting.dart';
+import 'AdminAccountSetting.dart';
 import 'getProduct.dart';
 import 'getUserOrder.dart';
 import 'searchBox.dart';
-import 'VendorLoginPage.dart';
-import 'VendorOrder.dart';
+import 'AdminLoginPage.dart';
+import 'AdminOrder.dart';
 
 
-class VendorPanel extends StatefulWidget {
+class AdminPanel extends StatefulWidget {
 
-VendorPanel()
-{    DatabaseReference vendor_order=FirebaseDatabase.instance.reference().child('vendors').child(LoginScreenVendorState.auth2.currentUser.uid).child('order_request');
+AdminPanel()
+{    DatabaseReference Admin_order=FirebaseDatabase.instance.reference().child('Admins').child(LoginScreenAdminState.auth2.currentUser.uid).child('order_request');
 
-vendor_order.once().then((DataSnapshot snap) => _VendorPanelState.getOrderValue(snap));
+Admin_order.once().then((DataSnapshot snap) => _AdminPanelState.getOrderValue(snap));
 
 }
   @override
-  _VendorPanelState createState() => _VendorPanelState();
+  _AdminPanelState createState() => _AdminPanelState();
 }
 
-class _VendorPanelState extends State<VendorPanel>
+class _AdminPanelState extends State<AdminPanel>
 {
 
     File _image;
@@ -49,21 +49,22 @@ class _VendorPanelState extends State<VendorPanel>
    TextEditingController _shortInfoController = TextEditingController();
    static String _productId = DateTime.now().millisecondsSinceEpoch.toString();
    bool uploading = false;
-  static FirebaseAuth auth=LoginScreenVendorState.auth2;
+  static FirebaseAuth auth=LoginScreenAdminState.auth2;
   DatabaseReference _ref=FirebaseDatabase.instance.reference().child('products');
 
-  DatabaseReference add_ref=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('products').child(_productId);
-    DatabaseReference get_ref=FirebaseDatabase.instance.reference().child('vendors').child(auth.currentUser.uid).child('products');
+   // DatabaseReference userAdd_ref=FirebaseDatabase.instance.reference().child('users').child(auth.currentUser.uid).child('products').child(_productId);
+  DatabaseReference add_ref=FirebaseDatabase.instance.reference().child('Admins').child(auth.currentUser.uid).child('products').child(_productId);
+    DatabaseReference get_ref=FirebaseDatabase.instance.reference().child('Admins').child(auth.currentUser.uid).child('products');
 
     // CollectionReference _ref = FirebaseFirestore.instance.collection('products');
 
 
     // V_ref.once().then((DataSnapshot snap) => getValue(snap));
-    static  List<getProduct> vendorProductList =List();
+    static  List<getProduct> AdminProductList =List();
     void getValue(DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
-      vendorProductList.clear();
+      AdminProductList.clear();
       for (var individualKey in KEYS) {
         getProduct Product = new getProduct
           (
@@ -73,21 +74,21 @@ class _VendorPanelState extends State<VendorPanel>
             DATA[individualKey]['productId'],
             DATA[individualKey]['shortInfo'],
             DATA[individualKey]['title'],
-            DATA[individualKey]['vendorUid'],
+            DATA[individualKey]['AdminUid'],
         );
-        vendorProductList.add(Product);
+        AdminProductList.add(Product);
         print(Product.title.toString());
 
       }
-      print(vendorProductList.length);
-      Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorProduct(vendorProductList,auth)));
+      print(AdminProductList.length);
+      Navigator.push(context,MaterialPageRoute(builder: (context) =>AdminProduct(AdminProductList,auth)));
     }
 
-    static List<getUserOrder> vendorOrderRequestList =List();
+    static List<getUserOrder> AdminOrderRequestList =List();
     static void getOrderValue(DataSnapshot snap) {
       var KEYS = snap.value.keys;
       var DATA = snap.value;
-      vendorOrderRequestList.clear();
+      AdminOrderRequestList.clear();
       for (var individualKey in KEYS) {
         getUserOrder Product = new getUserOrder
           (
@@ -101,20 +102,20 @@ class _VendorPanelState extends State<VendorPanel>
           DATA[individualKey]['product_id'],
           DATA[individualKey]['state'],
         );
-        vendorOrderRequestList.add(Product);
+        AdminOrderRequestList.add(Product);
         // print(Product.title.toString());
 
       }
-      print(vendorOrderRequestList.length);
+      print(AdminOrderRequestList.length);
       print("helloo");
-      print(vendorOrderRequestList[0].state);
+      print(AdminOrderRequestList[0].state);
      // Navigator.push(context,MaterialPageRoute(builder: (context) =>MyOrder()));
 
       //Navigator.push(context,MaterialPageRoute(builder: (context) =>UserWishList(UserProductList,auth)));
     }
    @override
   Widget build(BuildContext context) {
-   return _image == null ? displayHomeScreen() : displayUploadVendorForm();
+   return _image == null ? displayHomeScreen() : displayUploadAdminForm();
   }
 
 
@@ -142,31 +143,31 @@ class _VendorPanelState extends State<VendorPanel>
               
               ListTile(
                   
-                  leading: Icon(Icons.home,color: Colors.teal,),
+                  leading: Icon(Icons.home,color: Colors.purple,),
                   title: Text(
                     "HomePage",
                   ),
                   //icon: Icon(Icons.home),
                   onTap: (){
-                    Navigator.pop(context,MaterialPageRoute(builder: (context) =>VendorPanel()));
+                    Navigator.pop(context,MaterialPageRoute(builder: (context) =>AdminPanel()));
                   },
               ),
               Divider(height:5,),
               ListTile(
                   
-                  leading: Icon(Icons.person,color: Colors.teal,),
+                  leading: Icon(Icons.person,color: Colors.purple,),
                   title: Text(
                     "My account",
                   ),
                   //icon: Icon(Icons.home),
                   onTap: (){
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorAccountSetting(auth)));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>AdminAccountSetting(auth)));
                   },
               ),
               Divider(height:5,),
             ListTile(
 
-              leading: Icon(Icons.person,color: Colors.teal,),
+              leading: Icon(Icons.person,color: Colors.purple,),
               title: Text(
                 "My products",
               ),
@@ -185,13 +186,13 @@ class _VendorPanelState extends State<VendorPanel>
             Divider(height:5,),
               ListTile(
                   
-                  leading: Icon(Icons.shopping_basket, color: Colors.teal,),
+                  leading: Icon(Icons.shopping_basket, color: Colors.purple,),
                   title: Text(
                     "Order Request",
                   ),
                   //icon: Icon(Icons.home),
                   onTap: (){
-                   Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorOrderRequest(vendorOrderRequestList)));
+                   Navigator.push(context,MaterialPageRoute(builder: (context) =>AdminOrderRequest(AdminOrderRequestList)));
 
                   },
               ),
@@ -213,7 +214,7 @@ class _VendorPanelState extends State<VendorPanel>
               Divider(height:5,),
               ListTile(
                   
-                  leading: Icon(Icons.logout, color: Colors.teal,),
+                  leading: Icon(Icons.logout, color: Colors.purple,),
                   title: Text(
                     "Logout",
                   ),
@@ -222,11 +223,11 @@ class _VendorPanelState extends State<VendorPanel>
 
                     auth.signOut();
                     auth = null;
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>VendorLogin()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>AdminLogin()));
 
                     if (auth == null) {
                       print("222222222222222222222222222");
-                     // Navigator.pop(context, MaterialPageRoute(builder: (context) => VendorLoginPage()));
+                     // Navigator.pop(context, MaterialPageRoute(builder: (context) => AdminLoginPage()));
                     }
                   },
               ),
@@ -236,9 +237,9 @@ class _VendorPanelState extends State<VendorPanel>
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.purple,
         title:Text(
-          'Gift Basket',
+          'E-Auction',
           
         ),
         actions: <Widget>[
@@ -268,23 +269,23 @@ class _VendorPanelState extends State<VendorPanel>
                 Padding(
                   padding: EdgeInsets.only(bottom:20.0),
                   child: Text(
-                    'Welcome To\nVendor Panel',
+                    'Welcome To\nAdmin Panel',
                     style: TextStyle(
                           fontSize: 40.0,
-                          color: Colors.teal,
+                          color: Colors.purple,
                           ),  
                   ),
                 ),
-                Icon(Icons.shop_two, color:Colors.teal, size: 150.0),
+                Icon(Icons.shop_two, color:Colors.purple, size: 150.0),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
                   child: MaterialButton(
                                   onPressed: ()=> takeImage(context),
-                                  color: Colors.teal,
+                                  color: Colors.purple,
                                   shape: StadiumBorder(),
                                   elevation: 20.0,
                                   hoverElevation: 40.0,
-                                  splashColor: Colors.teal[400],
+                                  splashColor: Colors.purple[400],
                                   height: 50.0,
                                   minWidth: 300.0,
 
@@ -309,20 +310,20 @@ class _VendorPanelState extends State<VendorPanel>
       builder: (con)
       {
         return SimpleDialog(
-          title: Text('Upload Product Image',style: TextStyle(color: Colors.teal,fontWeight: FontWeight.bold),),
+          title: Text('Upload Product Image',style: TextStyle(color: Colors.purple,fontWeight: FontWeight.bold),),
           children: <Widget>[
             SimpleDialogOption(
-              child: Text("Capture With Camera",style: TextStyle(color: Colors.tealAccent),),
+              child: Text("Capture With Camera",style: TextStyle(color: Colors.purpleAccent),),
               onPressed: _imgFromCamera,
             ),
 
             SimpleDialogOption(
-              child: Text("Select From Gallery",style: TextStyle(color: Colors.tealAccent),),
+              child: Text("Select From Gallery",style: TextStyle(color: Colors.purpleAccent),),
               onPressed: _imgFromGallery,
             ),
 
             SimpleDialogOption(
-              child: Text("Cancel",style: TextStyle(color: Colors.tealAccent),),
+              child: Text("Cancel",style: TextStyle(color: Colors.purpleAccent),),
               onPressed: (){
                 Navigator.pop(context);
               },
@@ -353,11 +354,11 @@ class _VendorPanelState extends State<VendorPanel>
       });
   }
   
-  displayUploadVendorForm()
+  displayUploadAdminForm()
   {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.teal,
+          backgroundColor: Colors.purple,
         title:Text(
           'Product Description',
           style: TextStyle(
@@ -473,11 +474,11 @@ class _VendorPanelState extends State<VendorPanel>
 
 
                   },
-                  color: Colors.teal,
+                  color: Colors.purple,
                   shape: StadiumBorder(),
                   elevation: 20.0,
                   hoverElevation: 40.0,
-                  splashColor: Colors.teal[400],
+                  splashColor: Colors.purple[400],
                   height: 50.0,
                   minWidth: 300.0,
                   child: Text(
@@ -520,7 +521,7 @@ await ut.whenComplete(() => addProduct());
       Widget okButton = FlatButton(
         child: Text("OK"),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => VendorPanel()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPanel()));
 
 
 
@@ -550,7 +551,7 @@ await ut.whenComplete(() => addProduct());
       Widget okButton = FlatButton(
         child: Text("OK"),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => VendorPanel()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AdminPanel()));
 
 
 
@@ -558,7 +559,8 @@ await ut.whenComplete(() => addProduct());
       );
 
       // Create AlertDialog
-      AlertDialog alert = AlertDialog(
+      AlertDialog alert = AlertDialog
+        (
         title: Text("No Product  Available!"),
         content: Text("Return to your home page"),
         actions: [
@@ -592,7 +594,7 @@ await ut.whenComplete(() => addProduct());
      String shortInfo=_shortInfoController.text;
      String description=_descriptionController.text;
      String productId=_productId;
-     String vendorUid=auth.currentUser.uid;
+     String AdminUid=auth.currentUser.uid;
      Map<String, Object> products= {
        'description':description,
        'imageUrl':imageUrl,
@@ -600,7 +602,7 @@ await ut.whenComplete(() => addProduct());
        'productId':productId,
        'shortInfo':shortInfo,
        'title':title,
-       'vendorUid':vendorUid,
+       'AdminUid':AdminUid,
 
 
      };
@@ -613,7 +615,7 @@ await ut.whenComplete(() => addProduct());
        'productId':productId,
        'shortInfo':shortInfo,
        'title':title,
-       'vendorUid':vendorUid,
+       'AdminUid':AdminUid,
      }).whenComplete(() => print('product also added to your account you can check it'));
      _productId=DateTime.now().millisecondsSinceEpoch.toString();
    // _ref.add({
@@ -623,6 +625,6 @@ await ut.whenComplete(() => addProduct());
    //     'productId':productId,
    //     'shortInfo':shortInfo,
    //     'title':title,
-   // }).then((value) => print("vendor added his product successfully")).catchError((error) => print("Failed to add user: $error"));
+   // }).then((value) => print("Admin added his product successfully")).catchError((error) => print("Failed to add user: $error"));
    }
 }
